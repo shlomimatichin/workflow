@@ -1,0 +1,30 @@
+{% load tickettags %}
+
+{% for event in events %}
+<div class="historyline">
+	{{event.ticket|ticketAnchor_title}}: on {{event.when}}, {{event.user|ticketUserHistoryAnchor}}
+	{% if event.relatedTo %}
+		defined relation "{{event.name}}" to {{event.relatedTo|ticketAnchor_title}}
+	{% else %}
+		set "{{event.name}}" to "{{event.value}}"
+	{% endif %}
+</div>
+{% endfor %}
+
+{% ifnotequal moreHistoryData "" %}
+<button id="showmorehistorybutton" type="button" class="btn btn-mini" data-loading-text="Loading...">
+	Show More History
+</button>
+
+<script>
+	$("#showmorehistorybutton").click( function() {
+		$.ajax( {	'url': 'getHistory',
+					'data': {{moreHistoryData|safe}},
+					'success': function( data ) {
+						$("#showmorehistorybutton").replaceWith( data );
+					},
+		});
+	});
+</script>
+
+{% endifnotequal %}

@@ -1,0 +1,9 @@
+.historyline {
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	background: #e0e0e0;
+	padding: 1px;
+	padding-left:4px;
+	margin: 2px;
+	font-size:80%;
+}

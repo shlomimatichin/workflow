@@ -1,0 +1,21 @@
+{% extends "calendar/base.html" %}
+
+{% block contents %}
+<link href="/static/css/calendar.css" rel="stylesheet">
+<a class="prevNext" href="{% url workflow.calendar.views.years year|add:'-2' %}">&lt;&lt; Prev</a>
+<a class="prevNext" href="{% url workflow.calendar.views.years year|add:'2' %}">Next &gt;&gt;</a>
+
+	{% for year, months in years %}
+		<div class="clear"></div>
+		<h4 class="yearTitle">{{ year }}</h4>
+		{% for month in months %}
+			<div class="month {% if month.current %}currentMonth{% endif %}" >
+				<a href="{% url workflow.calendar.views.month year month.n %}">{{ month.name }}</a>
+			</div>
+			{% if month.n == 6 or month.n == 12 %}
+				<div class="clearfloat"></div>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+
+{% endblock %}

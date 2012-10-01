@@ -1,0 +1,71 @@
+.prevNext {
+	color: #555;
+}
+
+.yearTitle {
+}
+
+.month {
+	border: 1px solid #555;
+	float: left;
+	padding: 4px 15px 4px 15px;
+	margin: 2px 3px 2px 3px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	width: 5em;
+}
+
+.month a {
+	color: #555;
+}
+
+.currentMonth {
+	background: #ccc;
+}
+
+.clearfloat {
+	clear: both;
+}
+
+.monthDaysTable {
+	border-width: 3px;
+	border-color: #999;
+	border-style: double;
+	padding: 20px 20px 20px 20px;
+	margin: 2px 3px 2px 3px;
+	display: table-cell;
+}
+
+.monthDaysTable a {
+	color: inherit;
+}
+
+.dayTitle {
+	padding: 4px 15px 4px 15px;
+	margin: 2px 3px 2px 3px;
+}
+
+.dayInMonthTable {
+	border: 1px solid #555;
+	padding: 4px 5px 4px 5px;
+	margin: 2px 3px 2px 3px;
+	vertical-align: text-top;
+}
+
+.dayInMonthTable_Today {
+	background: #add;
+}
+.dayInMonthTable_ThisMonth {
+}
+.dayInMonthTable_NotThisMonth {
+	color: #bbb;
+	border-color: #888;
+}
+.dayNumberInMonthTable {
+	font-size:120%;
+}
+.dayInMonthTable_WorkingDay {
+}
+.dayInMonthTable_NonWorkingDay {
+	background-color: #aaa;
+}

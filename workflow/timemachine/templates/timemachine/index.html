@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load timemachinetags %}
+
+{% block contents %}
+<div class="hero-unit">
+	<div class="pull-left">
+		<h1>Time Machine</h1>
+		<p>Compare current progress to the known plan in the past. Reflect upon decisions.</p>
+	</div>
+	<div class="pull-right">
+		<img src="/static/images/timemachineicon.png"/ width=150>
+	</div>
+	<div style="clear: both">
+	</div>
+</div>
+
+<div class="fluid-row">
+	<div class="span3">
+		<h2>Travel to:</h2>
+		<input type="text" id="datepicker"/>
+		<script>
+			function timeTravelToDate()
+			{
+				var when = datepicker.datepicker( 'getDate' );
+				document.location.href = "travelToDate/" + when.getFullYear() + "/" + ( when.getMonth() + 1 ) + "/" + when.getDate();
+			}
+			var datepicker;
+			$(function() {
+				datepicker = $("#datepicker").datepicker({'dateFormat':'{{dateFormat}}'});
+				{% if request|timeMachine_currentlyTraveling %}
+					datepicker.datepicker( 'setDate', {{request|timeMachine_currentlyTravelingDateObject}} );
+				{% endif %}
+				datepicker.change( timeTravelToDate );
+			});
+		</script>
+	</div>
+	<div class="span6">
+		{% if request|timeMachine_currentlyTraveling %}
+			<h2>Refine:</h2>
+			<select id="hour" name="hour" style="width:4em">
+				{% for hour in hours %}
+					<option value="{{hour}}">{{hour}}</option>
+				{% endfor %}
+			</select>
+			<select id="minute" name="minute" style="width:4em">
+				{% for minute in minutes %}
+					<option value="{{minute}}">{{minute}}</option>
+				{% endfor %}
+			</select>
+			<script>
+				$(function() {
+					var when = {{request|timeMachine_currentlyTravelingDateObject}};
+					$("#hour").val( when.getHours() ).change( function() {
+						document.location.href = "travelToHour/" + $(this).val();
+					});
+					$("#minute").val( when.getMinutes() );
+				});
+			</script>
+		{% endif %}
+	</div>
+	<div class="span3">
+		<h2>Stop traveling:</h2>
+		<button id="backtothepresentbutton" type="button" class="btn btn-primary
+				{% if not request|timeMachine_currentlyTraveling %}disabled{% endif %}
+				" data-loading-text="Loading...">
+			{% if request|timeMachine_currentlyTraveling %}
+				Back to the present
+			{% else %}
+				Already in the present
+			{% endif %}
+		</button>
+		<script>
+			function timeTravelToPresent()
+			{
+				document.location.href = "travelToPresent";
+			}
+			$(function() {
+				{% if request|timeMachine_currentlyTraveling %}
+					$("#backtothepresentbutton").click( timeTravelToPresent );
+				{% endif %}
+			});
+		</script>
+	</div>
+</div>
+
+<script>
+$("#navTimeMachine").addClass( "active" );
+</script>
+{% endblock %}

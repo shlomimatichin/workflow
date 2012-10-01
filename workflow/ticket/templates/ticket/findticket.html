@@ -1,0 +1,31 @@
+{% extends "ticket/sidebar.html" %}
+
+{% block nonsidecontents %}
+
+<H1> Find Ticket </H1>
+
+<div>
+By Free Text:
+<input id="searchbyfreetext"/>
+</div>
+
+<script type="text/javascript">
+	$("#searchbyfreetext").autocomplete({
+		minLength: 0,
+		source: "/ticket/searchTicketByFreeText",
+		select: function( event, ui ) {
+			document.location.href = ui.item.value;
+		},
+	});
+	$("#searchbyfreetext").focus();
+	$("#sidebarfindticket").addClass( "active" );
+</script>
+
+<div style="margin-top:10px;">
+	<form action="viewTicket">
+		By Ticket Number:
+		<input name="ticket"/>
+	</form>
+</div>
+
+{% endblock %}

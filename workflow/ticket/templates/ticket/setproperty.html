@@ -1,0 +1,13 @@
+{% extends "ticket/sidebar.html" %}
+
+{% block nonsidecontents %}
+
+<form action="setProperty" method="POST">
+	<legend>Set Property</legend>
+{% csrf_token %}
+<div>
+	{{ form.as_p }}
+</div>
+	<button type="submit" class="btn">Submit</button>
+</form>
+{% endblock %}

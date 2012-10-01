@@ -1,0 +1,11 @@
+{% extends "ticket/sidebar.html" %}
+
+{% block nonsidecontents %}
+
+<H1> Ticket {{ticket.id}}: </H1>
+
+<h3> This ticket is from the future... <h3>
+<img src="/static/images/timemachineicon.png" width=200/>
+<p><a class="btn btn-primary" href="/timemachine">Go to Time Machine</a></p>
+
+{% endblock %}

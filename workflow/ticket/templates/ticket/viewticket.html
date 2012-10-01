@@ -1,0 +1,88 @@
+{% extends "ticket/sidebar.html" %}
+{% load tickettags %}
+
+{% block nonsidecontents %}
+
+<H1> Ticket {{ticket.id}}: {{ticket.title}}, {{ticket.state}} </H1>
+
+<h4>Properties</h4>
+{% for property in ticket.propertiesWithoutDups %}
+<div class="row-fluid" style="border-radius: 10px; -moz-border-radius: 10px; background: #e0e0e0; padding: 4px; margin: 2px;">
+	<div class="span2">
+		{{property.name}}
+	</div>
+	<div class="span7">
+		{{property.value}}
+	</div>
+	<div class="span3">
+		<p style="font-size: 70%"> by {{property.user|ticketUserHistoryAnchor}} on {{property.when}} </p>
+	</div>
+</div>
+{% endfor %}
+
+<h4>Children</h4>
+{% for relation in ticket.childrenRelations %}
+<div class="row-fluid" style="border-radius: 10px; -moz-border-radius: 10px; background: #e0e0e0; padding: 4px; margin: 2px;">
+	<div class="span9">
+		{{relation.relatedTo|ticketAnchor_titleState}}
+	</div>
+	<div class="span3">
+		<p style="font-size: 70%"> by {{relation.user|ticketUserHistoryAnchor}} on {{relation.when}} </p>
+	</div>
+</div>
+{% endfor %}
+
+<h4>Parents</h4>
+{% for relation in ticket.parentsRelations %}
+<div class="row-fluid" style="border-radius: 10px; -moz-border-radius: 10px; background: #e0e0e0; padding: 4px; margin: 2px;">
+	<div class="span9">
+		{{relation.ticket|ticketAnchor_titleState}}
+	</div>
+	<div class="span3">
+		<p style="font-size: 70%"> by {{relation.user|ticketUserHistoryAnchor}} on {{relation.when}} </p>
+	</div>
+</div>
+{% endfor %}
+
+<div style="margin: 20px">
+	<div class="btn-group pull-left" style="margin-left: 10px" >
+		<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+			Set Property <span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu">
+			{{properties|safe}}
+		</ul>
+	</div>
+
+	<div class="btn-group pull-left" style="margin-left: 10px" >
+		<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+			Action <span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu">
+			{{actions|safe}}
+		</ul>
+	</div>
+
+	<button id="showhistorybutton" type="button" class="btn pull-left" data-loading-text="Loading..." style="margin-left: 10px">Show History</button>
+
+	<div class="clearfix"></div>
+
+</div>
+
+<div id="tickethistory" style="display:none;">
+<H4> History </H4>
+<div id="historylines"></div>
+</div>
+<script>
+	$("#showhistorybutton").click( function() {
+		$.ajax( {	'url': '/ticket/getHistory',
+					'data': { 'ticket': {{ticket.id}} },
+					'success': function( data ) {
+						$("#historylines").html( data );
+						$("#tickethistory").show();
+					},
+				});
+	});
+</script>
+
+{% endblock %}

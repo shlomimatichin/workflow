@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block contents %}
+	<div class="hero-unit">
+		<div class="pull-left">
+			<h1>Workflow</h1>
+			<p>Workflow makes it easy to manage agile development process</p>
+		</div>
+		<div class="pull-right">
+			<img src="/static/images/flow.jpg"/ width=200>
+		</div>
+		<div style="clear: both">
+		</div>
+	</div>
+	<div class="fluid-row">
+		<div class="span4">
+			<h2>Create Tickets</h2>
+			<p>Tickets are the basic building block for an agile plan</p>
+			<p><a class="btn btn-primary" href="/ticket">Tickets &raquo;</a></p>
+		</div>
+		<div class="span4">
+			<h2>Custom Workflow</h2>
+			<p>
+				Tickets can be edited without restriction. The custom workflow defines what is the recommended path
+				for each ticket. The custom workflow defines the shortcuts in the various screens
+			</p>
+			<p><a class="btn btn-primary" href="/customworkflow/stateMachine">State Machine &raquo;</a></p>
+		</div>
+		<div class="span4">
+			<h2>Estimate, Plan, Track</h2>
+			<p>
+				Use the calendar to input available effort. Estimate tickets. Track using burndown and gantt charts.
+				View original estimation by using the Time Machine.
+			</p>
+			<p><a class="btn btn-primary" href="/timemachine">Time Machine &raquo;</a></p>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "ticket/sidebar.html" %}
+
+{% block nonsidecontents %}
+
+<form action="newTicket" method="POST">
+	<legend>New Ticket</legend>
+{% csrf_token %}
+<div>
+	{{ form.as_p }}
+</div>
+	<button type="submit" class="btn">Submit</button>
+</form>
+
+<script>
+$("#sidebarnewticket").addClass( "active" );
+</script>
+{% endblock %}

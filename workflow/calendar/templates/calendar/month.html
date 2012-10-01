@@ -1,0 +1,70 @@
+{% extends "calendar/base.html" %}
+
+{% block contents %}
+<link href="/static/css/calendar.css" rel="stylesheet">
+
+<div class="monthDaysTable">
+	<a class="prevNext" href="{% url workflow.calendar.views.month year month "prev" %}">&lt;&lt; Prev</a>
+	<a class="prevNext" href="{% url workflow.calendar.views.month year month "next" %}">Next &gt;&gt;</a>
+
+	<h4>{{ mname }} {{ year }}</h4>
+
+	<table width=800 style="table-layout:fixed">
+	<col width=14>
+	<col width=14>
+	<col width=14>
+	<col width=14>
+	<col width=14>
+	<col width=14>
+	<col width=14>
+
+	<thead>
+		{% for dayTitle in dayTitles %}
+			<td class="dayTitle">{{dayTitle}}</td>
+		{% endfor %}
+	</thead>
+
+	{% for row in rows %}
+		<tr>
+			{% for date, classes, text, teamAttendances in row %}
+				<td class="dayInMonthTable {{classes}}">
+					<div class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="dayNumberInMonthTable">
+								{{date.day}}
+							</span>
+							<br/>
+							{{text}}
+						</a>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+							<li>
+								<a tabindex="-1" href="{% url workflow.calendar.views.toggleWorkingDay year month date.day %}">
+									Toggle Working Day
+								</a>
+							</li>
+							<li class="dropdown-submenu">
+								<a tabindex="-1" href="#">Toggle Team Member</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									{% for user in users %}
+										<a tabindex="-1" href="{% url workflow.calendar.views.toggleTeamMember user.id year month date.day %}">
+											{{user.username}}
+										</a>
+									{% endfor %}
+								</ul>
+							</li>
+						</ul>
+					</div>
+					{% for username, working in teamAttendances %}
+						<div>
+							{{username}} is {% if working %}working{% else %}not working{% endif %}
+						</div>
+					{% endfor %}
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor %}
+
+	</table>
+</div>
+
+{% endblock %}

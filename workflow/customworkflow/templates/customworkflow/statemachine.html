@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<div>
+	<a href="/customworkflow/plotStateMachine"><img src="plotStateMachine"/></a>
+</div>
+<pre>
+{{ states|safe }}
+</pre>
+
+<script>
+$("#navStateMachine").addClass( "active" );
+</script>
+{% endblock %}

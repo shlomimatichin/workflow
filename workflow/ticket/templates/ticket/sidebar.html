@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<div class="span3">
+	<div class="well sidebar-nav">
+		<ul class="nav nav-list">
+			<li class="nav-header">Menu</li>
+			<li id="sidebarnewticket"><a href="newTicket">New Ticket</a></li>
+			<li id="sidebarfindticket"><a href="findTicket">Find Ticket</a></li>
+			<li id="sidebartickettree"><a href="ticketTree">Ticket Tree</a></li>
+			<li id="sidebarviewhistory"><a href="viewHistory">View History</a></li>
+			<li class="nav-header">Last Viewed Tickets</li>
+			{% for ticket in lastViewedTickets %}
+				<li class="sidebarticket">
+					<a href="viewTicket?ticket={{ticket.id}}">
+						Ticket {{ticket.id}}: {{ticket.title}}, {{ticket.state}}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div><!--/.well -->
+</div><!--/span-->
+
+<div class="span9">
+{% block nonsidecontents %}{% endblock %}
+</div><!--/span-->
+
+<script>
+$("#navTicket").addClass( "active" );
+</script>
+{% endblock %}

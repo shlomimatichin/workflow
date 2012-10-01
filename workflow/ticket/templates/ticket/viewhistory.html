@@ -1,0 +1,22 @@
+{% extends "ticket/sidebar.html" %}
+
+{% block nonsidecontents %}
+
+<H1> History </H1>
+<div id="historylines">
+	<img src="/static/images/loader1.gif"/>
+</div>
+<script>
+{% if limitToUser %}
+	$.ajax( {	'url': '/ticket/getHistory?user={{limitToUser}}',
+{% else %}
+	$.ajax( {	'url': '/ticket/getHistory',
+{% endif %}
+				'success': function( data ) {
+					$("#historylines").html( data );
+				},
+			});
+	$("#sidebarviewhistory").addClass( "active" );
+</script>
+
+{% endblock %}
