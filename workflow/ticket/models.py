@@ -60,7 +60,7 @@ class Ticket( models.Model ):
 					del result[ relation.relatedTo.id ]
 				except:
 					pass
-		return result.values()
+		return sorted( result.values(), key = lambda x: x.order )
 
 	def relatedByRelations( self, relationName ):
 		relations = timemachine.filter( Relation.objects.filter( relatedTo = self, name__endswith = relationName ) )
@@ -89,8 +89,17 @@ class Ticket( models.Model ):
 		return [ r.ticket for r in self.parentsRelations() ]
 
 	@timemachine.decorators.ExceptionWhileInTimeTravel()
-	def addRelation( self, name, other, user ):
-		relation = Relation( ticket = self, relatedTo = other, name = name, user = user )
+	def addRelationAtEnd( self, name, other, user ):
+		previous = self.relations( name )
+		if len( previous ) == 0:
+			order = 1
+		else:
+			order = max( p.order for p in previous ) + 1
+		self.addRelation( name, other, order, user )
+
+	@timemachine.decorators.ExceptionWhileInTimeTravel()
+	def addRelation( self, name, other, order, user ):
+		relation = Relation( ticket = self, relatedTo = other, name = name, user = user, order = order )
 		relation.save()
 		return relation
 
@@ -108,5 +117,6 @@ class Relation( models.Model ):
 	ticket = models.ForeignKey( Ticket, related_name = 'relationsTo' )
 	name = models.CharField( max_length = 200, validators = [ validateWord ] )
 	relatedTo = models.ForeignKey( Ticket, related_name = 'relationsBy' )
+	order = models.FloatField()
 	user = models.ForeignKey( User )
 	when = models.DateTimeField( auto_now = True )

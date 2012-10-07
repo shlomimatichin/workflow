@@ -12,7 +12,7 @@
 			<li class="nav-header">Last Viewed Tickets</li>
 			{% for ticket in lastViewedTickets %}
 				<li class="sidebarticket">
-					<a href="viewTicket?ticket={{ticket.id}}">
+					<a href="viewTicket?ticket={{ticket.id}}" class="dragChild" data-ticket="{{ticket.id}}" draggable="true">
 						Ticket {{ticket.id}}: {{ticket.title}}, {{ticket.state}}
 					</a>
 				</li>

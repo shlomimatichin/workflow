@@ -4,7 +4,9 @@
 <div class="historyline">
 	{{event.ticket|ticketAnchor_title}}: on {{event.when}}, {{event.user|ticketUserHistoryAnchor}}
 	{% if event.relatedTo %}
-		defined relation "{{event.name}}" to {{event.relatedTo|ticketAnchor_title}}
+		defined relation "{{event.name}}"
+		<span style="font-size:70%">(order {{event.order}})</span>
+		to {{event.relatedTo|ticketAnchor_title}}
 	{% else %}
 		set "{{event.name}}" to "{{event.value}}"
 	{% endif %}

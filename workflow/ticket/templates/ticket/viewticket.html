@@ -20,17 +20,79 @@
 </div>
 {% endfor %}
 
+<style>
+	.dropChild {
+		background: #fff;
+		font-size: 60%;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		padding: 1px;
+		padding-left:4px;
+		margin: 2px;
+		margin-left: 13px;
+		text-align: center;
+	}
+	.dropChild:hover {
+		background: #eee;
+	}
+	.dropChildDraggedOver {
+		background: #eee;
+	}
+	#sortable { list-style-type: none; margin: 0; padding: 0; }
+	#sortable li { margin: 0; padding: 0; }
+</style>
+<script>
+	function onDrop( event ) {
+		var relatedTo = event.dataTransfer.getData( 'dragged' );
+		if ( relatedTo )
+		document.location.href = "setRelation?ticket={{ticket.id}}&relatedTo=" + relatedTo +
+									"&name=Parent Of&redirectToViewTicket={{ticket.id}}";
+	}
+	function onDragOver( event ) {
+		event.preventDefault();
+	}
+	function onDragStart( event ) {
+		event.dataTransfer.setData( 'dragged', $(event.target).data( 'ticket' ) );
+	}
+	$(function(){
+		$(".dropChild").bind( 'dragenter', function() { $(this).addClass( "dropChildDraggedOver" ); } ).
+						bind( 'dragleave', function() { $(this).removeClass( "dropChildDraggedOver" ); } );
+		$(".dragChild").attr( 'ondragstart', 'onDragStart( event )' );
+		$(".dropChild").attr( 'ondrop', 'onDrop( event )' ).attr( 'ondragover', 'onDragOver( event )' );
+
+		$("#sortable").sortable();
+		$("#sortable").disableSelection();
+		$("#sortable").bind( 'sortupdate', function( event ) {
+			var movedChild = $(event.toElement).parentsUntil( 'ul', 'li' ).attr( 'id' ).split( '_' )[ 1 ];
+			document.location.href = "reorderRelation?ticket={{ticket.id}}&name=Parent Of&" +
+										"redirectToViewTicket={{ticket.id}}&reorderedTicket=" + movedChild + "&" +
+										$("#sortable").sortable('serialize');
+		});
+	});
+</script>
+
 <h4>Children</h4>
-{% for relation in ticket.childrenRelations %}
-<div class="row-fluid" style="border-radius: 10px; -moz-border-radius: 10px; background: #e0e0e0; padding: 4px; margin: 2px;">
-	<div class="span9">
-		{{relation.relatedTo|ticketAnchor_titleState}}
-	</div>
-	<div class="span3">
-		<p style="font-size: 70%"> by {{relation.user|ticketUserHistoryAnchor}} on {{relation.when}} </p>
-	</div>
+<ul id="sortable">
+	{% for relation in ticket.childrenRelations %}
+	<li class="row-fluid" style="border-radius: 10px; -moz-border-radius: 10px; background: #e0e0e0; padding: 4px; margin: 2px;" id="order_{{relation.relatedTo.id}}">
+		<div class="span8">
+			{{relation.relatedTo|ticketAnchor_titleState}}
+		</div>
+		<div class="span1">
+			<i class="icon-resize-vertical"></i>
+			<a style="margin-top:0" href="setRelation?ticket={{ticket.id}}&relatedTo={{relation.relatedTo.id}}&name=Not Parent Of&redirectToViewTicket={{ticket.id}}" style="font-size: 70%;">
+				<i class="icon-remove-circle"></i>
+			</a>
+		</div>
+		<div class="span3">
+			<p style="font-size: 70%"> by {{relation.user|ticketUserHistoryAnchor}} on {{relation.when}} </p>
+		</div>
+	</li>
+	{% endfor %}
+</ul>
+<div class="dropChild" aaondrop="drop(event)" aaondragover="allowDrop(event)">
+	Drop recently viewed tickets here to add.
 </div>
-{% endfor %}
 
 <h4>Parents</h4>
 {% for relation in ticket.parentsRelations %}
@@ -65,9 +127,13 @@
 
 	<button id="showhistorybutton" type="button" class="btn pull-left" data-loading-text="Loading..." style="margin-left: 10px">Show History</button>
 
+	<button id="showtickettreebutton" type="button" class="btn pull-left" data-loading-text="Loading..." style="margin-left: 10px">Show Ticket Tree</button>
+
 	<div class="clearfix"></div>
 
 </div>
+
+<div id="tickettree"></div>
 
 <div id="tickethistory" style="display:none;">
 <H4> History </H4>
@@ -83,6 +149,12 @@
 					},
 				});
 	});
+	$("#showtickettreebutton").click( function() {
+		ticketTree("#tickettree", { ticketAsRoot: { id: {{ticket.id}}, title: '{{ticket.title}}' } } );
+	});
 </script>
+<script type="text/javascript" src="/static/jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="/static/jstree/_lib/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/static/js/tickettree.js"></script>
 
 {% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = patterns( 'workflow.ticket.views',
 	( r'^doSpawnChild$', 'doSpawnChild' ),
 	( r'^setProperty$', 'setProperty' ),
 	( r'^setRelation$', 'setRelation' ),
+	( r'^reorderRelation$', 'reorderRelation' ),
 
 	( r'^searchTicketByFreeText$', 'searchTicketByFreeText' ),
 )

@@ -181,10 +181,47 @@ def setRelation( request ):
 	assert name in [ 'Parent Of', 'Not Parent Of' ]
 	ticket = models.Ticket.objects.get( id = request.REQUEST[ 'ticket' ] )
 	relatedTo = models.Ticket.objects.get( id = request.REQUEST[ 'relatedTo' ] )
+	assert ticket != relatedTo
 	assert name != 'Parent Of' or relatedTo not in ticket.children()
 	assert name != 'Not Parent Of' or relatedTo in ticket.children()
-	ticket.addRelation( name, relatedTo, request.user )
-	return HttpResponse( '' )
+	ticket.addRelationAtEnd( name, relatedTo, request.user )
+	if 'redirectToViewTicket' in request.REQUEST:
+		return HttpResponseRedirect( 'viewTicket?ticket=%s' % request.REQUEST[ 'redirectToViewTicket' ] )
+	else:
+		return HttpResponse( '' )
+
+@login_required
+@cache.never_cache
+@debug.PrintException()
+@timemachine.decorators.TimeTravel( allowedInTimeTravel = False )
+def reorderRelation( request ):
+	name = request.REQUEST[ 'name' ]
+	assert not name.startswith( 'Not ' )
+	ticket = models.Ticket.objects.get( id = request.REQUEST[ 'ticket' ] )
+	relations = ticket.relations( request.REQUEST[ 'name' ] )
+	order = [ int( o ) for o in request.REQUEST.getlist( 'order[]' ) ]
+	assert len( order ) == len( relations )
+	reorderedTicket = models.Ticket.objects.get( id = request.REQUEST[ 'reorderedTicket' ] )
+	assert reorderedTicket in [ r.relatedTo for r in relations ]
+
+	newOrder = order.index( reorderedTicket.id )
+	previousID = order[ newOrder - 1 ] if newOrder > 0 else None
+	nextID = order[ newOrder + 1 ] if newOrder < len( order ) - 1 else None
+	findOrderByID = lambda id: [ r for r in relations if r.relatedTo.id == id ][ 0 ].order
+	if previousID and nextID:
+		orderValue = ( findOrderByID( nextID ) + findOrderByID( previousID ) ) / 2
+	elif previousID:
+		orderValue = findOrderByID( previousID ) + 1
+	else:
+		assert nextID
+		orderValue = findOrderByID( nextID ) - 1
+
+	ticket.addRelation( name, reorderedTicket, orderValue, request.user )
+
+	if 'redirectToViewTicket' in request.REQUEST:
+		return HttpResponseRedirect( 'viewTicket?ticket=%s' % request.REQUEST[ 'redirectToViewTicket' ] )
+	else:
+		return HttpResponse( '' )
 
 @login_required
 @debug.PrintException()
@@ -215,7 +252,7 @@ def doSpawnChild( request ):
 			ticket = models.Ticket.create()
 			ticket.setProperty( name = 'Title', value = form.cleaned_data[ 'title' ], user = request.user )
 			ticket.setProperty( name = 'State', value = form.cleaned_data[ 'state' ], user = request.user )
-			parentTicket.addRelation( 'Parent Of', ticket, request.user )
+			parentTicket.addRelationAtEnd( 'Parent Of', ticket, request.user )
 			return HttpResponseRedirect( 'viewTicket?ticket=%s' % ticket.id )
 	else:
 		spawnChild = customworkflow.STATE_MAP[ parentTicket.state() ].spawnChildByName( request.REQUEST[ 'spawnchild' ] )
