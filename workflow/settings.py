@@ -157,3 +157,6 @@ LOGGING = {
 
 CALENDAR_FIRST_WEEKDAY = 0 # change to 6 to start on sundays
 TIMEMACHINE_DATEPICKET_DATE_FORMAT = "mm/dd/yy"
+import workflow.customworkflow.defaultcustomworkflow
+CUSTOM_WORKFLOW_MODULE = workflow.customworkflow.defaultcustomworkflow
+WEEKDAY_IS_WORKING_DAY = lambda x: x != 5 and x != 6

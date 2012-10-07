@@ -1,11 +1,11 @@
 from django.conf import settings
 
-CATEGORIES = settings.CUSTOM_WORKFLOW_STATES
+CATEGORIES = settings.CUSTOM_WORKFLOW_MODULE.CATEGORIES
 ALL_STATES = sum( [ c.states for c in CATEGORIES ], [] )
 ALL_STATE_NAMES = [ s.name for s in ALL_STATES ]
 STATE_MAP = { s.name: s for s in ALL_STATES }
 STATE_MAP.update( { unicode( s.name ): s for s in ALL_STATES } )
-PROPERTIES = settings.CUSTOM_WORKFLOW_PROPERTIES
+PROPERTIES = settings.CUSTOM_WORKFLOW_MODULE.PROPERTIES
 
 assert len( set( ALL_STATE_NAMES ) ) == len( ALL_STATE_NAMES ), 'Custom workflow error: a state name is used twice'
 for state in ALL_STATES:
