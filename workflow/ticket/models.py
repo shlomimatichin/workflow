@@ -23,6 +23,9 @@ class Ticket( models.Model ):
 	def state( self ):
 		return self.getPropertyValue( 'State', 'No state' )
 
+	def titleState( self ):
+		return '"%s" [%s]' % ( self.title(), self.state() )
+
 	@classmethod
 	def create( cls ):
 		self = cls()

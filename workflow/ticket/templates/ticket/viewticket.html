@@ -3,7 +3,7 @@
 
 {% block nonsidecontents %}
 
-<H1> Ticket {{ticket.id}}: {{ticket.title}}, {{ticket.state}} </H1>
+<H1> Ticket {{ticket.id}}: {{ticket.titleState}} </H1>
 
 <h4>Properties</h4>
 {% for property in ticket.propertiesWithoutDups %}
@@ -139,6 +139,7 @@
 <H4> History </H4>
 <div id="historylines"></div>
 </div>
+
 <script>
 	$("#showhistorybutton").click( function() {
 		$.ajax( {	'url': '/ticket/getHistory',
@@ -153,6 +154,7 @@
 		ticketTree("#tickettree", { ticketAsRoot: { id: {{ticket.id}}, title: '{{ticket.title}}' } } );
 	});
 </script>
+
 <script type="text/javascript" src="/static/jstree/jquery.jstree.js"></script>
 <script type="text/javascript" src="/static/jstree/_lib/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/static/js/tickettree.js"></script>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tickettags %}
 
 {% block contents %}
 <div class="span3">
@@ -11,10 +12,8 @@
 			<li id="sidebarviewhistory"><a href="viewHistory">View History</a></li>
 			<li class="nav-header">Last Viewed Tickets</li>
 			{% for ticket in lastViewedTickets %}
-				<li class="sidebarticket">
-					<a href="viewTicket?ticket={{ticket.id}}" class="dragChild" data-ticket="{{ticket.id}}" draggable="true">
-						Ticket {{ticket.id}}: {{ticket.title}}, {{ticket.state}}
-					</a>
+				<li class="sidebarticket" class="dragChild" data-ticket="{{ticket.id}}" draggable="true">
+					{{ticket|ticketAnchor_titleState}}
 				</li>
 			{% endfor %}
 		</ul>

@@ -6,14 +6,14 @@ register = template.Library()
 
 @register.filter
 def ticketAnchor_title( ticket ):
-	result = '<a href="viewTicket?ticket=%d">Ticket %d: "%s"</a>' % (
+	result = '<a href="viewTicket?ticket=%d">#%d: "%s"</a>' % (
 			ticket.id, ticket.id, conditional_escape( ticket.title() ) )
 	return mark_safe( result )
 
 @register.filter
 def ticketAnchor_titleState( ticket ):
-	result = '<a href="viewTicket?ticket=%d">Ticket %d: "%s", %s</a>' % (
-			ticket.id, ticket.id, conditional_escape( ticket.title() ), conditional_escape( ticket.state() ) )
+	result = '<a href="viewTicket?ticket=%d">#%d: %s</a>' % (
+			ticket.id, ticket.id, conditional_escape( ticket.titleState() ) )
 	return mark_safe( result )
 
 @register.filter

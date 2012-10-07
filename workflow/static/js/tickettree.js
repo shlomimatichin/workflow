@@ -1,7 +1,8 @@
 function ticketTree( selector, options ) {
 	this._options = { ticketAsRoot: undefined };
 	$.extend( this._options, options );
-	this._contextMenu = function( node ) {
+
+	this._contextMenuItems = function( node ) {
 		if ( ! node.attr( 'data-ticket' ) )
 			return;
 		var result =  {	'viewTicket' : {

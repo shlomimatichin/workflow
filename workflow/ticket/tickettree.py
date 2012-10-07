@@ -30,7 +30,7 @@ class TicketTree:
 		return self._nodes
 
 	def _ticketsNodes( self, tickets ):
-		return [	self._node( t.title(),
+		return [	self._node( t.titleState(),
 					"/Ticket/%s" % t.id,
 					ticket = t ) for t in tickets ]
 
