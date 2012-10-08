@@ -73,6 +73,10 @@ CATEGORIES = [
 			showAsNew = True,
 			plotShape = CONTAINER_STATE_SHAPE
 		),
+		State( 'Team Member Queue',
+			showAsNew = True,
+			plotShape = CONTAINER_STATE_SHAPE,
+		),
 	),
 	Category( 'Past',
 		State( 'Done Task',

@@ -45,14 +45,14 @@
 	function onDrop( event ) {
 		var relatedTo = event.dataTransfer.getData( 'dragged' );
 		if ( relatedTo )
-		document.location.href = "setRelation?ticket={{ticket.id}}&relatedTo=" + relatedTo +
-									"&name=Parent Of&redirectToViewTicket={{ticket.id}}";
+			document.location.href = "setRelation?ticket={{ticket.id}}&relatedTo=" + relatedTo +
+										"&name=Parent Of&redirectToViewTicket={{ticket.id}}";
 	}
 	function onDragOver( event ) {
 		event.preventDefault();
 	}
 	function onDragStart( event ) {
-		event.dataTransfer.setData( 'dragged', $(event.target).data( 'ticket' ) );
+		event.dataTransfer.setData( 'dragged', $(event.target).parentsUntil( 'ul', 'li' ).data( 'ticket' ) );
 	}
 	$(function(){
 		$(".dropChild").bind( 'dragenter', function() { $(this).addClass( "dropChildDraggedOver" ); } ).

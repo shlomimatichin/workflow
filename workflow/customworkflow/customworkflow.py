@@ -13,3 +13,4 @@ for state in ALL_STATES:
 		assert transition.targetState in ALL_STATE_NAMES, "Transition %s, to state %s, is not in state list" % (
 				transition.name, transition.targetState )
 assert 'Discarded' in ALL_STATE_NAMES, 'The state "Discarded" must be defined'
+assert 'Team Member Queue' in ALL_STATE_NAMES, 'The state "Team Member Queue" must be defined'
